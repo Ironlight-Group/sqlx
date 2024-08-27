@@ -51,6 +51,35 @@ use crate::types::Type;
 ///   dewey_decimal: sqlx::types::Json<HashMap<String, Book>>
 /// }
 /// ```
+///
+/// If the query macros are used, it is necessary to tell the macro to use
+/// the `Json` adapter by using the type override syntax
+/// ```rust,ignore
+/// # async fn example3() -> sqlx::Result<()> {
+/// # let mut conn: sqlx::PgConnection = unimplemented!();
+/// #[derive(sqlx::FromRow)]
+/// struct Book {
+///     title: String,
+/// }
+///
+/// #[derive(sqlx::FromRow)]
+/// struct Author {
+///     name: String,
+///     books: sqlx::types::Json<Book>,
+/// }
+/// // Note the type override in the query string
+/// let authors = sqlx::query_as!(
+///     Author,
+///     r#"
+/// SELECT name, books as "books: Json<Book>"
+/// FROM authors
+///     "#
+/// )
+/// .fetch_all(&mut conn)
+/// .await?;
+/// # Ok(())
+/// # }
+/// ```
 #[derive(
     Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Serialize, Deserialize,
 )]
@@ -89,21 +118,15 @@ impl<T> AsMut<T> for Json<T> {
     }
 }
 
-const JSON_SERIALIZE_ERR: &str = "failed to encode value as JSON; the most likely cause is \
-                                  attempting to serialize a map with a non-string key type";
-
 // UNSTABLE: for driver use only!
 #[doc(hidden)]
 impl<T: Serialize> Json<T> {
-    pub fn encode_to_string(&self) -> String {
-        // Encoding is supposed to be infallible so we don't have much choice but to panic here.
-        // However, I believe that's the right thing to do anyway as an object being unable
-        // to serialize to JSON is likely due to a bug or a malformed datastructure.
-        serde_json::to_string(self).expect(JSON_SERIALIZE_ERR)
+    pub fn encode_to_string(&self) -> Result<String, serde_json::Error> {
+        serde_json::to_string(self)
     }
 
-    pub fn encode_to(&self, buf: &mut Vec<u8>) {
-        serde_json::to_writer(buf, self).expect(JSON_SERIALIZE_ERR)
+    pub fn encode_to(&self, buf: &mut Vec<u8>) -> Result<(), serde_json::Error> {
+        serde_json::to_writer(buf, self)
     }
 }
 
@@ -141,7 +164,10 @@ where
     for<'a> Json<&'a Self>: Encode<'q, DB>,
     DB: Database,
 {
-    fn encode_by_ref(&self, buf: &mut <DB as Database>::ArgumentBuffer<'q>) -> IsNull {
+    fn encode_by_ref(
+        &self,
+        buf: &mut <DB as Database>::ArgumentBuffer<'q>,
+    ) -> Result<IsNull, BoxDynError> {
         <Json<&Self> as Encode<'q, DB>>::encode(Json(self), buf)
     }
 }
