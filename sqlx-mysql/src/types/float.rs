@@ -33,18 +33,18 @@ impl Type<MySql> for f64 {
 }
 
 impl Encode<'_, MySql> for f32 {
-    fn encode_by_ref(&self, buf: &mut Vec<u8>) -> IsNull {
+    fn encode_by_ref(&self, buf: &mut Vec<u8>) -> Result<IsNull, BoxDynError> {
         buf.extend(&self.to_le_bytes());
 
-        IsNull::No
+        Ok(IsNull::No)
     }
 }
 
 impl Encode<'_, MySql> for f64 {
-    fn encode_by_ref(&self, buf: &mut Vec<u8>) -> IsNull {
+    fn encode_by_ref(&self, buf: &mut Vec<u8>) -> Result<IsNull, BoxDynError> {
         buf.extend(&self.to_le_bytes());
 
-        IsNull::No
+        Ok(IsNull::No)
     }
 }
 
@@ -59,6 +59,7 @@ impl Decode<'_, MySql> for f32 {
                     4 => LittleEndian::read_f32(buf),
                     // MySQL can return 8-byte DOUBLE values for a FLOAT
                     // We take and truncate to f32 as that's the same behavior as *in* MySQL,
+                    #[allow(clippy::cast_possible_truncation)]
                     8 => LittleEndian::read_f64(buf) as f32,
                     other => {
                         // Users may try to decode a DECIMAL as floating point;
