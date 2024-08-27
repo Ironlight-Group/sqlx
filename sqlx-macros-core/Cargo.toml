@@ -29,11 +29,7 @@ postgres = ["sqlx-postgres"]
 sqlite = ["sqlx-sqlite"]
 
 # type integrations
-<<<<<<< HEAD
 json = ["sqlx-core/json"]
-=======
-json = ["sqlx-core/json", "sqlx-mysql?/json", "sqlx-postgres?/json", "sqlx-sqlite?/json"]
->>>>>>> refs/remotes/launchbadge/main
 
 bigdecimal = ["sqlx-core/bigdecimal", "sqlx-postgres?/bigdecimal"]
 bit-vec = ["sqlx-core/bit-vec", "sqlx-postgres?/bit-vec"]
