@@ -56,7 +56,7 @@ default = ["any", "macros", "migrate", "json"]
 
 derive = ["sqlx-macros/derive"]
 macros = ["derive", "sqlx-macros/macros"]
-migrate = ["sqlx-core/migrate", "sqlx-macros?/migrate", "sqlx-postgres?/migrate"]
+migrate = ["sqlx-core/migrate", "sqlx-macros?/migrate", "sqlx-mysql?/migrate"]
 
 # intended mainly for CI and docs
 all-databases = ["mysql", "sqlite", "postgres", "any"]
@@ -98,22 +98,22 @@ _rt-async-std = []
 _rt-tokio = []
 
 # database
-any = ["sqlx-core/any", "sqlx-postgres?/any"]
+any = ["sqlx-core/any", "sqlx-mysql?/any"]
 postgres = ["sqlx-postgres", "sqlx-macros?/postgres"]
 mysql = ["sqlx-mysql", "sqlx-macros?/mysql"]
 sqlite = ["sqlx-sqlite", "sqlx-macros?/sqlite"]
 
 # types
-json = ["sqlx-macros?/json", "sqlx-postgres?/json"]
+json = ["sqlx-macros?/json", "sqlx-mysql?/json"]
 
-bigdecimal = ["sqlx-core/bigdecimal", "sqlx-macros?/bigdecimal", "sqlx-postgres?/bigdecimal"]
-bit-vec = ["sqlx-core/bit-vec", "sqlx-macros?/bit-vec", "sqlx-postgres?/bit-vec"]
-chrono = ["sqlx-core/chrono", "sqlx-macros?/chrono", "sqlx-postgres?/chrono", "sqlx-sqlite?/chrono"]
-ipnetwork = ["sqlx-core/ipnetwork", "sqlx-macros?/ipnetwork", "sqlx-postgres?/ipnetwork"]
-mac_address = ["sqlx-core/mac_address", "sqlx-macros?/mac_address", "sqlx-postgres?/mac_address"]
-rust_decimal = ["sqlx-core/rust_decimal", "sqlx-macros?/rust_decimal", "sqlx-postgres?/rust_decimal"]
-time = ["sqlx-core/time", "sqlx-macros?/time", "sqlx-postgres?/time"]
-uuid = ["sqlx-core/uuid", "sqlx-macros?/uuid", "sqlx-postgres?/uuid"]
+bigdecimal = ["sqlx-core/bigdecimal", "sqlx-macros?/bigdecimal", "sqlx-mysql?/bigdecimal"]
+bit-vec = ["sqlx-core/bit-vec", "sqlx-macros?/bit-vec"]
+chrono = ["sqlx-core/chrono", "sqlx-macros?/chrono", "sqlx-mysql?/chrono"]
+ipnetwork = ["sqlx-core/ipnetwork", "sqlx-macros?/ipnetwork"]
+mac_address = ["sqlx-core/mac_address", "sqlx-macros?/mac_address"]
+rust_decimal = ["sqlx-core/rust_decimal", "sqlx-macros?/rust_decimal", "sqlx-mysql?/rust_decimal"]
+time = ["sqlx-core/time", "sqlx-macros?/time", "sqlx-mysql?/time"]
+uuid = ["sqlx-core/uuid", "sqlx-macros?/uuid", "sqlx-mysql?/uuid"]
 regexp = ["sqlx-sqlite?/regexp"]
 
 [workspace.dependencies]
