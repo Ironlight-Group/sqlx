@@ -29,16 +29,16 @@ postgres = ["sqlx-postgres"]
 sqlite = ["sqlx-sqlite"]
 
 # type integrations
-json = ["sqlx-core/json"]
+json = ["sqlx-core/json", "sqlx-mysql?/json"]
 
-bigdecimal = ["sqlx-core/bigdecimal", "sqlx-postgres?/bigdecimal"]
-bit-vec = ["sqlx-core/bit-vec", "sqlx-postgres?/bit-vec"]
-chrono = ["sqlx-core/chrono", "sqlx-postgres?/chrono"]
-ipnetwork = ["sqlx-core/ipnetwork", "sqlx-postgres?/ipnetwork"]
-mac_address = ["sqlx-core/mac_address", "sqlx-postgres?/mac_address"]
-rust_decimal = ["sqlx-core/rust_decimal", "sqlx-postgres?/rust_decimal"]
-time = ["sqlx-core/time", "sqlx-postgres?/time"]
-uuid = ["sqlx-core/uuid", "sqlx-postgres?/uuid"]
+bigdecimal = ["sqlx-core/bigdecimal", "sqlx-mysql?/bigdecimal"]
+bit-vec = ["sqlx-core/bit-vec"]
+chrono = ["sqlx-core/chrono"]
+ipnetwork = ["sqlx-core/ipnetwork"]
+mac_address = ["sqlx-core/mac_address"]
+rust_decimal = ["sqlx-core/rust_decimal", "sqlx-mysql?/rust_decimal"]
+time = ["sqlx-core/time", "sqlx-mysql?/time"]
+uuid = ["sqlx-core/uuid", "sqlx-mysql?/uuid"]
 
 [dependencies]
 sqlx-core = { workspace = true, features = ["offline"] }
