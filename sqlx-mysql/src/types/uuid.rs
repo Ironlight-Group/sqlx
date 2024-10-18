@@ -40,8 +40,7 @@ impl Decode<'_, MySql> for Uuid {
             let text = std::str::from_utf8(bytes)?;
 
             // parse a UUID from the text
-            Uuid::parse_str(text)
-                .map_err(Into::into)
+            Uuid::parse_str(text).map_err(Into::into)
         }
     }
 }
