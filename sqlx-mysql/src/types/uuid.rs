@@ -37,8 +37,7 @@ impl Decode<'_, MySql> for Uuid {
             // construct a Uuid from the returned bytes
             Uuid::from_slice(bytes).map_err(Into::into)
         } else {
-            // delegate to the &str type to decode from MySQL
-            let text = <&str as Decode<MySql>>::decode(value)?;
+            let text = std::str::from_utf8(bytes)?;
 
             // parse a UUID from the text
             Uuid::parse_str(text)
