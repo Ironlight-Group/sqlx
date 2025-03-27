@@ -21,6 +21,8 @@
 //! | [`PgLQuery`]                          | LQUERY                                               |
 //! | [`PgCiText`]                          | CITEXT<sup>1</sup>                                   |
 //! | [`PgCube`]                            | CUBE                                                 |
+//! | [`PgPoint]                            | POINT                                                |
+//! | [`PgLine]                             | LINE                                                 |
 //! | [`PgHstore`]                          | HSTORE                                               |
 //!
 //! <sup>1</sup> SQLx generally considers `CITEXT` to be compatible with `String`, `&str`, etc.,
@@ -212,6 +214,8 @@ mod bigdecimal;
 
 mod cube;
 
+mod geometry;
+
 #[cfg(any(feature = "bigdecimal", feature = "rust_decimal"))]
 mod numeric;
 
@@ -242,6 +246,8 @@ mod bit_vec;
 pub use array::PgHasArrayType;
 pub use citext::PgCiText;
 pub use cube::PgCube;
+pub use geometry::line::PgLine;
+pub use geometry::point::PgPoint;
 pub use hstore::PgHstore;
 pub use interval::PgInterval;
 pub use lquery::PgLQuery;
