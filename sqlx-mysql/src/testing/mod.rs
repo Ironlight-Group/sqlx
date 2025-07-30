@@ -210,15 +210,18 @@ async fn do_cleanup(conn: &mut MySqlConnection, created_before: Duration) -> Res
         }
     }
 
-    let mut query = QueryBuilder::new("delete from _sqlx_test_databases where db_id in (");
+    // this check is necessary because `delete ... where db_id in ()` is invalid syntax
+    if !deleted_db_ids.is_empty() {
+        let mut query = QueryBuilder::new("delete from _sqlx_test_databases where db_id in (");
 
-    let mut separated = query.separated(",");
+        let mut separated = query.separated(",");
 
-    for db_id in &deleted_db_ids {
-        separated.push_bind(db_id);
+        for db_id in &deleted_db_ids {
+            separated.push_bind(db_id);
+        }
+
+        query.push(")").build().execute(&mut *conn).await?;
     }
-
-    query.push(")").build().execute(&mut *conn).await?;
 
     Ok(deleted_db_ids.len())
 }
